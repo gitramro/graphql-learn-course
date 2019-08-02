@@ -1,0 +1,30 @@
+type User {
+  id: ID! @id
+  name: String!
+  email:String! @unique
+  password: String!
+  posts:[Post!]! @relation(name:"PostToUser",onDelete:CASCADE) #when a user gets deleted it deletes all posts
+  comments: [Comment!]! @relation(name:"CommentToUser",onDelete:CASCADE) #when a user gets deleted it deletes all comments
+  updatedAt: DateTime @updatedAt #removed the ! because we added this fileds after and we couldnt fetch not nullable data
+  createdAt: DateTime @createdAt
+} 
+
+type Post{
+  id: ID! @id
+  title:String!
+  body:String!
+  published:Boolean!
+  author:User! @relation(name:"PostToUser",onDelete:SET_NULL) #when a post gets deleted it sets to null author
+  comments:[Comment!]! @relation(name:"CommentToPost",onDelete:CASCADE) #when a post gets deleted it deletes all comments
+  updatedAt: DateTime @updatedAt
+  createdAt: DateTime @createdAt
+}
+
+type Comment{
+  id:ID!@id
+  text: String!
+  author: User! @relation(name:"CommentToUser",onDelete:SET_NULL) #when a comments gets deleted it sets to null author
+  post: Post! @relation(name:"CommentToPost",onDelete:SET_NULL) #when a comments gets deleted it sets to null post
+  updatedAt: DateTime @updatedAt
+  createdAt: DateTime @createdAt
+}

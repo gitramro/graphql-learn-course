@@ -1,0 +1,21 @@
+type User {
+  id: ID! @id
+  username: String!
+  reviews:[Review!]!  @relation(name:"ReviewToUser",onDelete:CASCADE) #when a user gets deleted it deletes all reviews
+} 
+
+type Book{
+  id: ID! @id
+  title:String!
+  author:String!
+  isbn:String!
+  reviews:[Review!]! @relation(name:"ReviewToBook",onDelete:CASCADE) #when a book gets deleted it deletes all reviews
+}
+
+type Review{
+  id:ID!@id
+  text:String!
+  rating:Int!
+  book:Book! @relation(name:"ReviewToBook",onDelete:SET_NULL) #when a review gets deleted it set null all reviews
+  author:User! @relation(name:"ReviewToUser",onDelete:SET_NULL) #when a review gets deleted it set null all reviews
+}
